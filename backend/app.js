@@ -1,6 +1,9 @@
 const express=require('express');
 const cors=require('cors');
 const {db}=require("./db/db");
+const fs = require('fs');
+
+
 const app=express();
 
 
@@ -14,6 +17,14 @@ app.use(cors());
 app.get("/",(req,res)=>{
     res.send("Hello World");
 })
+
+
+// routes
+fs.readdirSync('./routes').map((route) => {
+    app.use('/api/v1', require('./routes/' + route));
+  });
+  
+
 const server=()=>{
     db();
    app.listen(PORT,()=>{
