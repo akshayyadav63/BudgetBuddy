@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { BarChart, CreditCard, TrendingUp, DollarSign, LogOut, Moon, Sun } from 'lucide-react';
 import avatar from '../../assets/avatar.png'
+import { Link } from 'react-router-dom';
+
 export default function Sidebar() {
   const [darkMode, setDarkMode] = useState(false);
   
@@ -49,28 +51,28 @@ export default function Sidebar() {
           <nav>
             <ul className="space-y-1">
               <li>
-                <a href="#" className={`flex items-center py-3 px-4 rounded-lg border-l-4 shadow-sm ${activeClasses}`}>
+                <Link to="/dashboard" className={`flex items-center py-3 px-4 rounded-lg border-l-4 shadow-sm ${activeClasses}`}>
                   <BarChart className="mr-3" size={18} />
                   <span className="font-medium">Dashboard</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className={`flex items-center py-3 px-4 rounded-lg hover:shadow-sm transition-all duration-200 ${menuItemClasses}`}>
+                <Link to="/transactions" className={`flex items-center py-3 px-4 rounded-lg hover:shadow-sm transition-all duration-200 ${menuItemClasses}`}>
                   <CreditCard className={`mr-3 ${iconClasses}`} size={18} />
                   <span>View Transactions</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className={`flex items-center py-3 px-4 rounded-lg hover:shadow-sm transition-all duration-200 ${menuItemClasses}`}>
+                <Link to="/income" className={`flex items-center py-3 px-4 rounded-lg hover:shadow-sm transition-all duration-200 ${menuItemClasses}`}>
                   <TrendingUp className={`mr-3 ${iconClasses}`} size={18} />
                   <span>Incomes</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className={`flex items-center py-3 px-4 rounded-lg hover:shadow-sm transition-all duration-200 ${menuItemClasses}`}>
+                <Link to="/expense" className={`flex items-center py-3 px-4 rounded-lg hover:shadow-sm transition-all duration-200 ${menuItemClasses}`}>
                   <DollarSign className={`mr-3 ${iconClasses}`} size={18} />
                   <span>Expenses</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
