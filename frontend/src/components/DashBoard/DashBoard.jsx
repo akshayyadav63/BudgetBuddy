@@ -120,9 +120,21 @@ const StatsCard = ({ title, value, icon, color }) => {
 const Dashboard = () => {
   return (
 <div className="h-screen flex bg-gradient-to-br from-gray-50 to-gray-100">
+  
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div
+      className="flex-1 overflow-y-auto p-6"
+      style={{
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none'
+      }}
+    >
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Center Part */}
           <div className="w-full lg:w-2/3 space-y-6">

@@ -3,7 +3,7 @@ const authModel=require('../models/authModel');
 const jwt=require("jsonwebtoken")
 const bcrypt = require("bcrypt");
 
-const JWT_SECRET_KEY=process.env.JWT_SECRET||"gshaksjduknasmn";
+const JWT_SECRET_KEY=process.env.JWT_SECRET;
 
 exports.signup= async (req,res)=>{
     const {username,email,password}=req.body;

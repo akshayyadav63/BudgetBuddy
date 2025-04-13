@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { Wallet, ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
+import  React,{ useState } from 'react';
+import { Wallet, ArrowRight, ChevronDown, Menu, X} from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function SimpleBudgetBuddyLanding() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen font-sans">
-      {/* Stylish gradient background */}
       <div className="fixed inset-0 bg-gradient-to-br from-teal-50 via-blue-50 to-indigo-50 -z-10"></div>
       
-      {/* Decorative shapes */}
+ 
       <div className="fixed top-0 right-0 w-1/2 h-1/2 bg-gradient-to-bl from-teal-100/20 to-emerald-200/10 rounded-bl-full -z-10 blur-3xl"></div>
       <div className="fixed bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-indigo-100/20 to-violet-200/10 rounded-tr-full -z-10 blur-3xl"></div>
       
@@ -36,13 +36,13 @@ export default function SimpleBudgetBuddyLanding() {
             
             {/* Desktop navigation */}
             <div className="hidden md:flex items-center space-x-1">
-              <a href="#features" className="px-4 py-2 rounded-full text-gray-700 hover:text-teal-600 hover:bg-teal-50 transition-all">Features</a>
-              <a href="#about" className="px-4 py-2 rounded-full text-gray-700 hover:text-teal-600 hover:bg-teal-50 transition-all">About</a>
-              <a href="#contact" className="px-4 py-2 rounded-full text-gray-700 hover:text-teal-600 hover:bg-teal-50 transition-all">Contact</a>
-              <a href="#login" className="px-4 py-2 rounded-full text-gray-700 hover:text-teal-600 hover:bg-teal-50 transition-all ml-2">Login</a>
-              <a href="#signup" className="px-6 py-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-full hover:shadow-lg hover:shadow-teal-200 transition-all">
+              <Link to="/features" className="px-4 py-2 rounded-full text-gray-700 hover:text-teal-600 hover:bg-teal-50 transition-all">Features</Link>
+              <Link to="/about" className="px-4 py-2 rounded-full text-gray-700 hover:text-teal-600 hover:bg-teal-50 transition-all">About</Link>
+              <Link to="/contact" className="px-4 py-2 rounded-full text-gray-700 hover:text-teal-600 hover:bg-teal-50 transition-all">Contact</Link>
+              <Link to="/login" className="px-4 py-2 rounded-full text-gray-700 hover:text-teal-600 hover:bg-teal-50 transition-all ml-2">Login</Link>
+              <Link to="/signup" className="px-6 py-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-full hover:shadow-lg hover:shadow-teal-200 transition-all">
                 Get Started
-              </a>
+              </Link>
             </div>
           </div>
           
@@ -50,13 +50,13 @@ export default function SimpleBudgetBuddyLanding() {
           {isMenuOpen && (
             <div className="md:hidden bg-white/90 backdrop-blur-md shadow-lg rounded-xl mt-4 py-4 absolute left-6 right-6 z-20">
               <div className="flex flex-col space-y-3 px-6">
-                <a href="#features" className="py-2 text-gray-800 hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Features</a>
-                <a href="#about" className="py-2 text-gray-800 hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>About</a>
-                <a href="#contact" className="py-2 text-gray-800 hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Contact</a>
-                <a href="#login" className="py-2 text-gray-800 hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Login</a>
-                <a href="#signup" className="py-2 text-center mt-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-full" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/features" className="py-2 text-gray-800 hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Features</Link>
+                <Link to="/about" className="py-2 text-gray-800 hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>About</Link>
+                <Link to="/contact" className="py-2 text-gray-800 hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+                <Link to="/login" className="py-2 text-gray-800 hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Login</Link>
+                <Link to="/signup" className="py-2 text-center mt-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-full" onClick={() => setIsMenuOpen(false)}>
                   Get Started
-                </a>
+                </Link>
               </div>
             </div>
           )}
