@@ -13,9 +13,9 @@ exports.addIncome = async (req, res) => {
     });
 
     try {
-        if (!title || !category || !description || !date || !amount) {
+        if (!title || !category || !date || amount === undefined || amount === null) {
             return res.status(400).json({ message: "Fields are required" });
-        }
+          }
 
         if (amount <= 0 || typeof amount !== 'number') {
             return res.status(400).json({ message: "Amount must be a positive number" });

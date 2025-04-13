@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   DollarSign, Calendar, Tag, Plus, Briefcase, ArrowUpCircle, Trash2, BarChart2,
 } from 'lucide-react';
@@ -10,10 +11,7 @@ export default function Income() {
 
   const { title, amount, date, category, description } = inputState;
 
-  const [recentIncomes, setRecentIncomes] = useState([
-    { id: 1, title: "Monthly Salary", amount: 5000, date: "2025-04-10", category: "salary" },
-    { id: 2, title: "Freelance Project", amount: 1200, date: "2025-04-05", category: "freelance" },
-  ]);
+  const [recentIncomes, setRecentIncomes] = useState([]);
 
   const handleInputChange = (e) => {
     setInputState({
@@ -22,30 +20,51 @@ export default function Income() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const fetchIncomes = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/v1/get-income');
+      setRecentIncomes(res.data);
+    } catch (error) {
+      console.error("Failed to fetch incomes:", error);
+    }
+  };
 
+  useEffect(() => {
+    fetchIncomes();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const newIncome = {
-      id: Date.now(),
       title,
       amount: parseFloat(amount),
       date,
       category,
+      description,
     };
 
-    setRecentIncomes([newIncome, ...recentIncomes]);
-
-    setInputState({
-      title: "",
-      amount: "",
-      date: "",
-      category: "",
-      description: "",
-    });
+    try {
+      await axios.post('http://localhost:5000/api/v1/add-income', newIncome);
+      await fetchIncomes();
+      setInputState({
+        title: "",
+        amount: "",
+        date: "",
+        category: "",
+        description: "",
+      });
+    } catch (error) {
+      console.error("Error adding income:", error.response?.data?.message || error.message);
+    }
   };
 
-  const deleteIncome = (id) => {
-    setRecentIncomes(recentIncomes.filter((income) => income.id !== id));
+  const deleteIncome = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/v1/delete-income/${id}`);
+      setRecentIncomes((prev) => prev.filter((income) => income._id !== id));
+    } catch (error) {
+      console.error("Delete failed:", error.response?.data?.message || error.message);
+    }
   };
 
   const totalIncome = recentIncomes.reduce((sum, income) => sum + income.amount, 0);
@@ -66,18 +85,18 @@ export default function Income() {
 
   return (
     <div
-    className="h-screen w-full overflow-y-auto px-4 py-6 lg:pl-20 bg-gray-100"
-    style={{
-      scrollbarWidth: 'none', // Firefox
-      msOverflowStyle: 'none' // IE and Edge
-    }}
-  >
-    <style jsx>{`
-      div::-webkit-scrollbar {
-        display: none;
-      }
-    `}</style>
-  
+      className="h-screen w-full overflow-y-auto px-4 py-6 lg:pl-20 bg-gray-100"
+      style={{
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none'
+      }}
+    >
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+
       {/* Small header summary */}
       <div className="mb-6">
         <div className="flex items-center justify-between bg-white shadow-md rounded-xl p-4">
@@ -98,7 +117,7 @@ export default function Income() {
       </div>
 
       <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col lg:flex-row">
-        {/* Income Form - 1/3 */}
+        {/* Income Form */}
         <div className="w-full lg:w-1/3 border-b lg:border-b-0 lg:border-r border-gray-200 p-6">
           <div className="flex items-center mb-6">
             <div className="bg-green-100 p-2 rounded-lg mr-3">
@@ -184,7 +203,7 @@ export default function Income() {
           </form>
         </div>
 
-        {/* Recent Transactions - 2/3 */}
+        {/* Recent Transactions */}
         <div className="w-full lg:w-2/3 p-6 bg-gray-50">
           <div className="flex items-center mb-4">
             <Calendar size={18} className="text-blue-600 mr-2" />
@@ -197,7 +216,7 @@ export default function Income() {
                 const { bgColor, textColor, icon } = getCategoryStyle(income.category);
                 return (
                   <div
-                    key={income.id}
+                    key={income._id}
                     className="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center border border-gray-100 hover:shadow-md"
                   >
                     <div className="flex items-center">
@@ -217,7 +236,7 @@ export default function Income() {
                         ${income.amount.toFixed(2)}
                       </span>
                       <button
-                        onClick={() => deleteIncome(income.id)}
+                        onClick={() => deleteIncome(income._id)}
                         className="p-2 rounded-full bg-gray-100 hover:bg-red-100 text-gray-400 hover:text-red-500 transition"
                       >
                         <Trash2 size={16} />
