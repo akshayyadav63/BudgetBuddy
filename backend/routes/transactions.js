@@ -11,6 +11,7 @@ const { addExpense, getExpense, deleteExpense } = require('../controllers/expens
 
 router.post('/add-income', addIncome);
 router.get("/get-income", getIncome);
+router.get("/get-income/:userId",getIncome);
 router.delete("/delete-income/:id", deleteIncome);
 
 // expense routes

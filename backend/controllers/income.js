@@ -2,18 +2,19 @@ const { config } = require("dotenv");
 const Income = require("../models/incomeModel");
 
 exports.addIncome = async (req, res) => {
-    const { title, amount, category, description, date } = req.body;
+    const { title, amount, category, description, date,userId } = req.body;
 
     const income = new Income({
         title,
         amount,
         category,
         description,
-        date
+        date,
+        userId
     });
 
     try {
-        if (!title || !category || !date || amount === undefined || amount === null) {
+        if (!title || !category || !date || !userId||amount === undefined || amount === null) {
             return res.status(400).json({ message: "Fields are required" });
           }
 
@@ -29,8 +30,20 @@ exports.addIncome = async (req, res) => {
 };
 
 exports.getIncome=async (req,res)=>{
+    
  try{
   const incomes=await Income.find().sort({createdAt:-1});
+  res.status(200).json(incomes);
+
+ }catch(error){
+    res.status(500).json({ message: "Server error", error: error.message });
+ }
+}
+
+exports.getIncome=async (req,res)=>{
+    const {userId}=req.params;
+ try{
+  const incomes=await Income.find({userId}).sort({createdAt:-1});
   res.status(200).json(incomes);
 
  }catch(error){

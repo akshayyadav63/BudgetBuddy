@@ -11,7 +11,7 @@ export default function SimpleBudgetBuddyLanding() {
       
  
       <div className="fixed top-0 right-0 w-1/2 h-1/2 bg-gradient-to-bl from-teal-100/20 to-emerald-200/10 rounded-bl-full -z-10 blur-3xl"></div>
-      <div className="fixed bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-indigo-100/20 to-violet-200/10 rounded-tr-full -z-10 blur-3xl"></div>
+      <div className="fixed bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-indigo-100/20 to-blue-200/10 rounded-tr-full -z-10 blur-3xl"></div>
       
       {/* Navigation */}
       <nav className="relative z-10 px-6 lg:px-12 py-6">

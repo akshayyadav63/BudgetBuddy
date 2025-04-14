@@ -3,15 +3,20 @@ import axios from 'axios';
 import {
   DollarSign, Calendar, Tag, Plus, Briefcase, ArrowUpCircle, Trash2, BarChart2,
 } from 'lucide-react';
+import { useUser } from '../../context/userContext';
 
 export default function Income() {
   const [inputState, setInputState] = useState({
-    title: "", amount: "", date: "", category: "", description: "",
+    title: "",
+    amount: "",
+    date: "",
+    category: "",
+    description: "",
   });
 
   const { title, amount, date, category, description } = inputState;
-
   const [recentIncomes, setRecentIncomes] = useState([]);
+  const { userId } = useUser();
 
   const handleInputChange = (e) => {
     setInputState({
@@ -22,16 +27,20 @@ export default function Income() {
 
   const fetchIncomes = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/v1/get-income');
-      setRecentIncomes(res.data);
+      const res = await axios.get(`http://localhost:5000/api/v1/get-income/${userId}`);
+      const incomes = Array.isArray(res.data) ? res.data : res.data.incomes || [];
+      setRecentIncomes(incomes);
     } catch (error) {
       console.error("Failed to fetch incomes:", error);
     }
   };
+  
 
   useEffect(() => {
-    fetchIncomes();
-  }, []);
+    if (userId) {
+      fetchIncomes();
+    }
+  }, [userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,6 +50,7 @@ export default function Income() {
       date,
       category,
       description,
+      userId,
     };
 
     try {
@@ -67,9 +77,11 @@ export default function Income() {
     }
   };
 
-  const totalIncome = recentIncomes.reduce((sum, income) => sum + income.amount, 0);
+  const totalIncome = Array.isArray(recentIncomes)
+    ? recentIncomes.reduce((sum, income) => sum + parseFloat(income.amount || 0), 0)
+    : 0;
 
-  const getCategoryStyle = (category) => {
+  const getCategoryStyle = (category = "") => {
     switch (category.toLowerCase()) {
       case "salary":
         return { bgColor: "bg-green-100", textColor: "text-green-600", icon: <Briefcase size={18} /> };
@@ -84,20 +96,14 @@ export default function Income() {
   };
 
   return (
-    <div
-      className="h-screen w-full overflow-y-auto px-4 py-6 lg:pl-20 bg-gray-100"
-      style={{
-        scrollbarWidth: 'none',
-        msOverflowStyle: 'none'
-      }}
-    >
+    <div className="h-screen w-full overflow-y-auto px-4 py-6 lg:pl-20 bg-gray-100" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       <style jsx>{`
         div::-webkit-scrollbar {
           display: none;
         }
       `}</style>
 
-      {/* Small header summary */}
+      {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between bg-white shadow-md rounded-xl p-4">
           <div className="flex items-center gap-3">
@@ -117,7 +123,7 @@ export default function Income() {
       </div>
 
       <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col lg:flex-row">
-        {/* Income Form */}
+        {/* Form Section */}
         <div className="w-full lg:w-1/3 border-b lg:border-b-0 lg:border-r border-gray-200 p-6">
           <div className="flex items-center mb-6">
             <div className="bg-green-100 p-2 rounded-lg mr-3">
@@ -167,7 +173,6 @@ export default function Income() {
                   required
                 />
               </div>
-
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-1 block">Category</label>
                 <input
@@ -175,7 +180,7 @@ export default function Income() {
                   name="category"
                   value={category}
                   onChange={handleInputChange}
-                  placeholder="e.g. salary"
+                  placeholder="e.g. Salary"
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500"
                   required
                 />
@@ -203,7 +208,7 @@ export default function Income() {
           </form>
         </div>
 
-        {/* Recent Transactions */}
+        {/* Transactions Section */}
         <div className="w-full lg:w-2/3 p-6 bg-gray-50">
           <div className="flex items-center mb-4">
             <Calendar size={18} className="text-blue-600 mr-2" />
@@ -233,7 +238,7 @@ export default function Income() {
                     </div>
                     <div className="flex items-center">
                       <span className="text-green-600 font-semibold text-md mr-4">
-                        ${income.amount.toFixed(2)}
+                        ${parseFloat(income.amount).toFixed(2)}
                       </span>
                       <button
                         onClick={() => deleteIncome(income._id)}

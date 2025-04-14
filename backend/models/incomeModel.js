@@ -35,6 +35,11 @@ const IncomeSchema=new mongoose.Schema({
         maxLength:20,
         trim:true
     },
+    userId:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"authSchema",
+            required:true
+        }
 
 },{timestamps:true})
 
