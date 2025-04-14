@@ -2,7 +2,7 @@ const { config } = require("dotenv");
 const expenseModel = require("../models/expenseModel");
 
 exports.addExpense = async (req, res) => {
-    const { title, amount, category, description, date } = req.body;
+    const { title, amount, category, description, date,userId } = req.body;
 
     const expense = new expenseModel({
         title,
@@ -37,6 +37,17 @@ exports.getExpense=async (req,res)=>{
  }catch(error){
     res.status(500).json({ message: "Server error", error: error.message });
  }
+}
+
+exports.getExpense=async(req,res)=>{
+    const {userId}=req.params;
+    try{
+        const expense=await expenseModel.find({userId}).sort({createdAt:-1});
+        res.status(200).json(expense)
+    }catch(error){
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+
 }
 
 exports.deleteExpense=async (req,res)=>{

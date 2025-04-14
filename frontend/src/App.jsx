@@ -8,9 +8,11 @@ import Expense from './components/pages/expense';
 import ViewTransaction from './components/pages/viewTransiction';
 import Login from './components/Auth/login';
 import Signup from './components/Auth/signup';
+import { ThemeProvider } from './context/themeContext';
 
 function App() {
   return (
+    <ThemeProvider>
     <BrowserRouter>
       <Routes>
        
@@ -26,6 +28,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
