@@ -160,7 +160,7 @@ export default function Income() {
             </div>
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-lg font-medium hover:from-green-600 hover:to-emerald-700 transition-all"
+              className="w-full bg-gradient-to-r from-green-600 to-emerald-700 text-white py-3 rounded-lg font-medium hover:from-green-600 hover:to-emerald-700 transition-all"
             >
               <Plus size={18} className="inline mr-2" />
               Add Income

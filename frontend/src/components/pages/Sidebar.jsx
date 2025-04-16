@@ -1,22 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTheme } from '../../context/themeContext'; 
-import { Link } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import { BarChart, CreditCard, TrendingUp, DollarSign, LogOut, Moon, Sun } from 'lucide-react';
 import avatar from '../../assets/avatar.png';
+import axios from 'axios';
+import { useUser } from '../../context/userContext';
 
-const ProfileSection = ({ darkMode }) => (
-  <div className={`flex items-center p-6 pb-4 border-b ${darkMode ? 'border-gray-800' : 'border-gray-100'}`}>
-    <div className={`w-12 h-12 rounded-full ${darkMode ? 'bg-gray-800' : 'bg-indigo-100'} flex items-center justify-center overflow-hidden mr-3 border-2 ${darkMode ? 'border-gray-700' : 'border-indigo-200'} shadow-sm`}>
+const ProfileSection = ({ darkMode,name,onUpload }) => {
+  const handleprofile=(e)=>{
+   e.preventDefault()
+   onUpload();
+  }
+ return( <div className={`flex items-center p-6 pb-4 border-b ${darkMode ? 'border-gray-800' : 'border-gray-100'}`}>
+    <div onClick={handleprofile} className={`w-12 h-12 rounded-full ${darkMode ? 'bg-gray-800' : 'bg-indigo-100'} flex items-center justify-center overflow-hidden mr-3 border-2 ${darkMode ? 'border-gray-700' : 'border-indigo-200'} shadow-sm`}>
       <img src={avatar} alt="User avatar" className="object-cover" />
     </div>
     <div>
-      <h3 className="font-bold text-lg">Mike</h3>
-      <p className={darkMode ? "text-gray-400" : "text-gray-500"}>Your Money</p>
+     <h3 className="font-bold text-lg">{name}</h3>
+
     </div>
   </div>
 );
+}
 
-// Sidebar Navigation Links Component
+
+
 const NavigationLinks = ({ darkMode }) => {
   const menuItemClasses = darkMode ? "text-gray-300 hover:bg-gray-800" : "text-gray-700 hover:bg-gray-50";
   const activeClasses = darkMode ? "bg-indigo-900/30 text-indigo-300 border-indigo-400" : "bg-indigo-50 text-indigo-700 border-indigo-600";
@@ -72,24 +80,67 @@ const ThemeToggle = ({ darkMode, toggleTheme }) => (
 );
 
 // Sidebar Sign Out Component
-const SignOut = ({ darkMode }) => (
-  <div className="px-3 pb-6">
-    <a href="#" className={`flex items-center py-3 px-4 rounded-lg hover:shadow-sm transition-all duration-200 ${darkMode ? 'hover:bg-red-900/30 hover:text-red-300' : 'hover:bg-red-50 hover:text-red-600'}`}>
-      <LogOut className={`mr-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} size={18} />
-      <span>Sign Out</span>
-    </a>
-  </div>
-);
+const SignOut = ({ darkMode, onLogout }) => {
+
+  const handleSignOut = (e) => {
+    e.preventDefault();
+    if (onLogout) onLogout();
+  };
+
+  return (
+    <div className="px-3 pb-6">
+      <a
+        href="#"
+        onClick={handleSignOut}
+        className={`flex items-center py-3 px-4 rounded-lg hover:shadow-sm transition-all duration-200 ${
+          darkMode
+            ? 'hover:bg-red-900/30 hover:text-red-300'
+            : 'hover:bg-red-50 hover:text-red-600'
+        }`}
+      >
+        <LogOut
+          className={`mr-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}
+          size={18}
+        />
+        <span>Sign Out</span>
+      </a>
+    </div>
+  );
+};
+
 
 // Main Sidebar Component
 const Sidebar = () => {
-  const { darkMode, toggleTheme } = useTheme(); // Access darkMode from context
+  const { darkMode, toggleTheme } = useTheme(); 
+  const navigate=useNavigate();
+  const {username}=useUser();
+  
+  console.log(username)
+
+
+  const handleLogout= async (req,res)=>{
+      
+    try {
+      await axios.get('http://localhost:5000/api/v1/logout');
+      localStorage.removeItem('token');
+      console.log("Successfully logged out");
+      navigate('/');
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+    
+  }
+  const handleprofile= async ()=>{
+    
+  }
+  
 
   return (
     <div className="h-screen flex">
       <div className={`h-full my-4 ml-4 rounded-xl shadow-lg w-64 overflow-hidden flex flex-col transition-colors duration-300 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
         {/* Profile Section */}
-        <ProfileSection darkMode={darkMode} />
+        <ProfileSection darkMode={darkMode} onUpload={handleprofile}
+        name={username.split(" ")[0]} />
         
         {/* Navigation Links */}
         <NavigationLinks darkMode={darkMode} />
@@ -101,7 +152,7 @@ const Sidebar = () => {
         <div className={`h-px bg-gradient-to-r ${darkMode ? 'from-gray-900 via-gray-700 to-gray-900' : 'from-white via-gray-200 to-white'} mx-6 my-2`}></div>
         
         {/* Sign Out */}
-        <SignOut darkMode={darkMode} />
+        <SignOut darkMode={darkMode} onLogout={handleLogout} />
       </div>
     </div>
   );

@@ -29,8 +29,9 @@ const Login = () => {
       console.log("Login Successful", response.data);
       login({
         userId: response.data.user._id,
-        name: response.data.user.name || "", 
+        username: response.data.user.username || "", 
       });
+      console.log(response.data.user.username);
       console.log(response.data.user._id)
       navigate("/dashboard");
     } catch (error) {

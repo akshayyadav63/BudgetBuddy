@@ -7,7 +7,7 @@ export function useUser() {
 }
 
 export function UserProvider({ children }) {
-  const [user, setUser] = useState({ userId: null, name: '' });
+  const [user, setUser] = useState({ userId: null, username: '' });
 
   
   useEffect(() => {
@@ -23,12 +23,12 @@ export function UserProvider({ children }) {
   };
 
   const logout = () => {
-    setUser({ userId: null, name: '' });
+    setUser({ userId: null, username: '' });
     localStorage.removeItem('user'); 
   };
 
   return (
-    <UserContext.Provider value={{ userId: user.userId, login, logout }}>
+    <UserContext.Provider value={{ userId: user.userId,username: user.username, login, logout }}>
       {children}
     </UserContext.Provider>
   );
